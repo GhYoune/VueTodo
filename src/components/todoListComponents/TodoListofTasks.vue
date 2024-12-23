@@ -1,11 +1,14 @@
 <script setup>
 import { useTaskStore } from "@/stores/taskStore.js";
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { onMounted } from 'vue';
 
 const todoStore = useTaskStore();
 const newTask = ref('');
-const tasks = todoStore.allTasks;
-
+const tasks = computed(() => todoStore.allTasks);
+onMounted(() => {
+    todoStore.fetchTasks();
+});
 
 function addNewTask() {
     todoStore.addTask(newTask.value)
@@ -21,7 +24,7 @@ function completeTask(task) {
 <template>
     <div class="w-full flex justify-center items-center py-3">
         <div class="w-full flex justify-center items-center ">
-            <input v-model="newTask" type="text" placeholder="New task ?"
+            <input v-model="newTask" type="text" placeholder="New task ?" id="task"
                 class="p-2 w-3/6 rounded-md text-black font-semibold">
             <button @click="addNewTask" class="p-2 rounded-md bg-violet-600 text-white fonts w-1/12 ">Add</button>
         </div>
