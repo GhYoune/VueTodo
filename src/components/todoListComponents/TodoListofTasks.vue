@@ -3,17 +3,34 @@ import { useTaskStore } from "@/stores/taskStore.js";
 import { ref, computed } from 'vue';
 import { onMounted } from 'vue';
 import { vAutoAnimate } from "@formkit/auto-animate";
+import {
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+} from '@headlessui/vue'
 
 const todoStore = useTaskStore();
-const newTask = ref('');
+const newTask = ref({ title: '', priority: '' });
+const prioCheck = {
+    "High": '🔥',
+    "Medium": '⚡',
+    "Low": '🌳',
+}
+const options = ref([
+    { value: "High", label: "High 🔥" },
+    { value: "Medium", label: "Medium ⚡" },
+    { value: "Low", label: "Low 🌳" },
+]);
 const tasks = computed(() => todoStore.allTasks);
 onMounted(() => {
     todoStore.fetchTasks();
 });
 
 function addNewTask() {
+    if (!newTask.value.title.trim()) return;
     todoStore.addTask(newTask.value)
-    newTask.value = '';
+    newTask.value = { title: '', priority: '' };
 }
 function removeTask(task) {
     todoStore.removeTask(task);
@@ -21,12 +38,28 @@ function removeTask(task) {
 function completeTask(task) {
     todoStore.taskCompleted(task);
 }
+
 </script>
 <template>
-    <div class="w-full flex justify-center items-center py-3">
-        <input v-model="newTask" type="text" placeholder="New task ?" id="task"
+    <div class="flex space-x-4  p-4 bg-slate-800 w-full rounded-xl shadow-lg">
+        <input v-model="newTask.title" type="text" placeholder="New task ?" id="task"
             class="p-2 w-4/5 rounded-md text-black font-semibold">
-        <button @click="addNewTask" class="p-2 rounded-md bg-violet-600 text-white fonts w-1/12 "><svg
+        <Listbox name="priority" id="priority" class="text-black font-semibold relative" v-model="newTask.priority"
+            as="div" v-auto-animate>
+            <ListboxButton class="py-2 pl-3 pr-10 text-left bg-white rounded-md shadow-md">
+                {{ newTask.priority || 'Priority' }}
+            </ListboxButton>
+            <ListboxOptions class="absolute z-10 mt-1 w-full bg-white rounded-md shadow-lg" v-auto-animate>
+                <ListboxOption value="High" class="cursor-pointer select-none p-2 hover:bg-gray-100">High 🔥
+                </ListboxOption>
+                <ListboxOption value="Medium" class="cursor-pointer select-none p-2 hover:bg-gray-100">Medium ⚡
+                </ListboxOption>
+                <ListboxOption value="Low" class="cursor-pointer select-none p-2 hover:bg-gray-100">Low 🌳
+                </ListboxOption>
+            </ListboxOptions>
+        </Listbox>
+        <button @click="addNewTask"
+            class="p-2 rounded-md bg-violet-600 text-white fonts w-1/12 flex items-center justify-center"><svg
                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-circle-plus">
@@ -35,12 +68,13 @@ function completeTask(task) {
                 <path d="M12 8v8" />
             </svg></button>
 
-    </div>
-    <div class="w-full p-2 rounded-xl shadow-xl">
-        <ul class="w-full" v-auto-animate>
 
+    </div>
+
+    <div class="p-3 bg-slate-800 w-full rounded-2xl shadow-lg my-4">
+        <ul class="" v-auto-animate>
             <li v-for="task in tasks"
-                class="w-4/5 text-sm font-semibold text-white bg-slate-700 px-4 py-2 rounded-md m-auto my-2 shadow-2xl hover:bg-slate-600 transition ease-in-out duration-300 cursor-pointer ">
+                class="text-sm font-semibold text-white bg-slate-700 px-3 py-3 rounded-md m-auto my-3 shadow-2xl hover:bg-slate-600 transition ease-in-out duration-300 cursor-pointer ">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center space-x-3 justify-center">
                         <div class="w-7 h-7 border-2 border-cyan-500 rounded-full" @click="completeTask(task)">
@@ -54,22 +88,29 @@ function completeTask(task) {
                         <div>
                             <span class="text-slate-400">{{ task.createdAt }}</span>
                             <br>
-                            <span class="text-white font-semibold">{{ task.text }}</span>
+                            <span class="text-white font-semibold"
+                                :class="{ 'line-through opacity-35': task.completed }">{{
+                                    task.title }} <span v-if="prioCheck[task.priority]">{{ prioCheck[task.priority]
+                                    }}</span></span>
+
                         </div>
                     </div>
-                    <button @click="removeTask(task)"
-                        class="p-2 rounded-full hover:bg-red-600 transition ease-in-out duration-300 ">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="lucide lucide-trash">
-                            <path d="M3 6h18" />
-                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                        </svg>
-                    </button>
+                    <div class=" flex items-center space-x-3">
+                        <span class=" rounded-xl p-1 font-semibold"
+                            :class="{ 'bg-red-500 text-white': task.priority === 'High', 'bg-green-500 text-white': task.priority === 'Low', 'bg-yellow-500 text-white': task.priority === 'Medium' }">{{
+                                task.priority }}</span>
+                        <button @click="removeTask(task)"
+                            class="p-2 rounded-full hover:bg-red-600 transition ease-in-out duration-300 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-trash">
+                                <path d="M3 6h18" />
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-
-
             </li>
         </ul>
     </div>

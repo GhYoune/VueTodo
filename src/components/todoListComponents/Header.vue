@@ -23,21 +23,21 @@ const greetings = computed(() => {
 
 
 <template>
-    <div class="w-full flex justify-center items-center my-5">
-        <div class="flex  items-center space-x-5">
+    <div class="w-full flex justify-between items-center">
+        <div class=" w-full items-center space-x-5  space-y-3">
 
             <div
-                class="bg-cyan-500 text-center rounded-lg p-2 shadow-2xl hover:scale-110 transition duration-200 ease-in-out">
+                class="bg-cyan-500 text-center rounded-lg p-2 shadow-2xl hover:scale-105 transition duration-200 ease-in-out">
                 <span class=" font-semibold text-base text-white">{{ weekday }}</span>,
                 <p class=" text-5xl font-extrabold text-white">{{ day }}</p>
                 <span class="text-white">{{ month }}</span>
 
             </div>
-            <div class="">
-                <h1 class="font-bold text-2xl text-slate-100  w-full">
+            <div class="space-y-2 pb-4">
+                <h1 class="text-center font-bold text-2xl text-slate-100  w-full">
                     {{ greetings }}
                 </h1>
-                <h3 class="text-center text-lg font-bold">What do we have to accomplish today ?</h3>
+                <h3 class="text-center text-lg font-bold ">What do we have to accomplish today ?</h3>
             </div>
             <!-- <div
                 class="bg-gray-900 text-center rounded-lg p-3 shadow-2xl hover:scale-110 transition duration-200 ease-in-out font-bold text-xl text-white ">

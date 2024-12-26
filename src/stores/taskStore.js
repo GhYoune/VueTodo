@@ -28,12 +28,13 @@ export const useTaskStore = defineStore('task', {
         }))
       })
     },
-    async addTask(taskText) {
-      if (!taskText.trim()) return // Validate input
+    async addTask(task) {
+      if (!task.title.trim()) return // Validate input
 
       const newTask = {
-        text: taskText,
+        title: task.title,
         completed: false,
+        priority: task.priority,
         createdAt: new Date().toLocaleString(),
       }
 
