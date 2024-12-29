@@ -18,8 +18,9 @@ import SideBar from "./SideBar.vue";
 
             </div>
         </div>
-        <div class="w-4/12 h-3/4">
-            <Calender />
+        <div class="w-4/12 h-3/4 ">
+            <!-- <Calender /> -->
+            ..
         </div>
 
     </div>

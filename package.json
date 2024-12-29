@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.2",
+    "@formkit/vue": "^1.6.9",
     "@headlessui/vue": "^1.7.23",
     "firebase": "^11.1.0",
     "pinia": "^2.2.6",

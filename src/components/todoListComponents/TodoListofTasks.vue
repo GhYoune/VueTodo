@@ -1,6 +1,7 @@
 <script setup>
 import { useTaskStore } from "@/stores/taskStore.js";
 import { ref, computed } from 'vue';
+// import { Transition } from 'vue';
 import { onMounted } from 'vue';
 import { vAutoAnimate } from "@formkit/auto-animate";
 import {
@@ -8,6 +9,7 @@ import {
     ListboxButton,
     ListboxOptions,
     ListboxOption,
+
 } from '@headlessui/vue'
 
 const todoStore = useTaskStore();
@@ -49,14 +51,20 @@ function completeTask(task) {
             <ListboxButton class="py-2 pl-3 pr-10 text-left bg-white rounded-md shadow-md">
                 {{ newTask.priority || 'Priority' }}
             </ListboxButton>
-            <ListboxOptions class="absolute z-10 mt-1 w-full bg-white rounded-md shadow-lg" v-auto-animate>
-                <ListboxOption value="High" class="cursor-pointer select-none p-2 hover:bg-gray-100">High 🔥
-                </ListboxOption>
-                <ListboxOption value="Medium" class="cursor-pointer select-none p-2 hover:bg-gray-100">Medium ⚡
-                </ListboxOption>
-                <ListboxOption value="Low" class="cursor-pointer select-none p-2 hover:bg-gray-100">Low 🌳
-                </ListboxOption>
-            </ListboxOptions>
+            <transition enter-active-class="transition duration-100 ease-out"
+                enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
+                leave-active-class="transition duration-75 ease-out" leave-from-class="transform scale-100 opacity-100"
+                leave-to-class="transform scale-95 opacity-0">
+                <ListboxOptions class="absolute z-10 mt-1 w-full bg-white rounded-md shadow-lg" v-auto-animate>
+                    <ListboxOption value="High" class="cursor-pointer select-none p-2 hover:bg-gray-100">High 🔥
+                    </ListboxOption>
+                    <ListboxOption value="Medium" class="cursor-pointer select-none p-2 hover:bg-gray-100">Medium ⚡
+                    </ListboxOption>
+                    <ListboxOption value="Low" class="cursor-pointer select-none p-2 hover:bg-gray-100">Low 🌳
+                    </ListboxOption>
+                </ListboxOptions>
+            </transition>
+
         </Listbox>
         <button @click="addNewTask"
             class="p-2 rounded-md bg-violet-600 text-white fonts w-1/12 flex items-center justify-center"><svg
@@ -71,8 +79,8 @@ function completeTask(task) {
 
     </div>
 
-    <div class="p-3 bg-slate-800 w-full rounded-2xl shadow-lg my-4">
-        <ul class="" v-auto-animate>
+    <div class="p-3 bg-slate-800 w-full rounded-2xl shadow-lg my-4 ">
+        <ul class="max-h-[370px] overflow-y-auto custom-scrollbar" v-auto-animate>
             <li v-for="task in tasks"
                 class="text-sm font-semibold text-white bg-slate-700 px-3 py-3 rounded-md m-auto my-3 shadow-2xl hover:bg-slate-600 transition ease-in-out duration-300 cursor-pointer ">
                 <div class="flex justify-between items-center">
