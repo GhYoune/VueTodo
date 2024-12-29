@@ -17,6 +17,17 @@ export const useTaskStore = defineStore('task', {
     reactive({
       // tasks: JSON.parse(localStorage.getItem('tasks')) || [],
       tasks: [],
+      priOptions: [
+        { value: 'High', label: 'High 🔥' },
+        { value: 'Medium', label: 'Medium ⚡' },
+        { value: 'Low', label: 'Low 🌳' },
+      ],
+      catOptions: [
+        { value: 'Health', label: 'Health 🍀' },
+        { value: 'Work', label: 'Work 👨🏻‍💼' },
+        { value: 'To Buy', label: 'To Buy 🏬' },
+        { value: 'Familly', label: 'Familly and Friends 🙋🏻‍♂️🙋🏻‍♀️' },
+      ],
     }),
   //FIRESTORE ACTIONS
   actions: {
@@ -29,12 +40,13 @@ export const useTaskStore = defineStore('task', {
       })
     },
     async addTask(task) {
-      if (!task.title.trim()) return // Validate input
+      if (!task.title.trim()) return
 
       const newTask = {
         title: task.title,
         completed: false,
         priority: task.priority,
+        category: task.category,
         createdAt: new Date().toLocaleString(),
       }
 
@@ -89,5 +101,6 @@ export const useTaskStore = defineStore('task', {
   getters: {
     allTasks: (state) => state.tasks,
     tasksCount: (state) => state.tasks.length,
+    tasksByCatigories : (state)=>state
   },
 })

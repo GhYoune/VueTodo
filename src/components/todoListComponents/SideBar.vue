@@ -1,4 +1,31 @@
 <script setup>
+import { useTaskStore } from '@/stores/taskStore';
+import { computed } from 'vue';
+const taskStore = useTaskStore();
+const taskByCatigoriy = computed(() => {
+    const counts = {};
+    taskStore.catOptions.forEach(option => {
+        counts[option.value] = 0;
+    });
+    taskStore.allTasks.forEach(task => {
+        if (task.category && counts.hasOwnProperty(task.category)) {
+            counts[task.category]++;
+        }
+    });
+    return counts;
+})
+const taskByPriority = computed(() => {
+    const counts = {};
+    taskStore.priOptions.forEach(option => {
+        counts[option.value] = 0;
+    });
+    taskStore.allTasks.forEach(task => {
+        if (task.priority && counts.hasOwnProperty(task.priority)) {
+            counts[task.priority]++;
+        }
+    });
+    return counts;
+})
 </script>
 <template>
     <div class="h-full bg-gray-800">
@@ -17,13 +44,29 @@
         <div class="h-8/12">
             <div class="p-4 font-bold text-lg underline ">Catigories :</div>
             <div>
-                <ul>
-                    <li>
+                <ul class="p-2 space-y-4">
+                    <li v-for="option in taskStore.catOptions"
+                        class="text-sm font-semibold text-white bg-slate-700 px-3 py-3 rounded-md m-auto my-3 shadow-2xl hover:bg-slate-600 transition ease-in-out duration-300 cursor-pointer ">
+                        <div class="flex justify-between"><span> {{ option.label }}</span> <span class="text-md ">({{
+                            taskByCatigoriy[option.value]
+                                }})
+                            </span></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="p-4 font-bold text-lg underline ">Priorities :</div>
+            <div>
+                <ul class="p-2 space-y-4">
+                    <li v-for="option in taskStore.priOptions"
+                        class="text-sm font-semibold text-white bg-slate-700 px-3 py-3 rounded-md m-auto my-3 shadow-2xl hover:bg-slate-600 transition ease-in-out duration-300 cursor-pointer ">
+                        <div class="flex justify-between"><span> {{ option.label }}</span> <span class="text-md ">({{
+                            taskByPriority[option.value]
+                                }})
+                            </span></div>
 
                     </li>
                 </ul>
             </div>
         </div>
-        <!-- <div class="h-1/12 p-4 font-bold text-lg bg-red-500">Footer :</div> -->
     </div>
 </template>

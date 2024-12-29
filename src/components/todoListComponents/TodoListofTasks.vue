@@ -11,29 +11,28 @@ import {
     ListboxOption,
 
 } from '@headlessui/vue'
+import { FormKit } from "@formkit/vue";
 
 const todoStore = useTaskStore();
-const newTask = ref({ title: '', priority: '' });
+const newTask = ref({ title: '', priority: '', category: '' });
+
 const prioCheck = {
     "High": '🔥',
     "Medium": '⚡',
     "Low": '🌳',
 }
-const options = ref([
-    { value: "High", label: "High 🔥" },
-    { value: "Medium", label: "Medium ⚡" },
-    { value: "Low", label: "Low 🌳" },
-]);
 const tasks = computed(() => todoStore.allTasks);
 onMounted(() => {
     todoStore.fetchTasks();
+
 });
 
 function addNewTask() {
-    if (!newTask.value.title.trim()) return;
+    if (!newTask.value.title.trim() || !newTask.value.category.trim()) return;
     todoStore.addTask(newTask.value)
-    newTask.value = { title: '', priority: '' };
+    newTask.value = { title: '', priority: '', category: '' };
 }
+
 function removeTask(task) {
     todoStore.removeTask(task);
 }
@@ -44,8 +43,8 @@ function completeTask(task) {
 </script>
 <template>
     <div class="flex space-x-4  p-4 bg-slate-800 w-full rounded-xl shadow-lg">
-        <input v-model="newTask.title" type="text" placeholder="New task ?" id="task"
-            class="p-2 w-4/5 rounded-md text-black font-semibold">
+        <input required name="title" id="title" type="text" validation="required|max:180" v-model="newTask.title"
+            placeholder="New task ?" help="Your task headline" class="p-2 w-4/5 rounded-md text-black font-semibold" />
         <Listbox name="priority" id="priority" class="text-black font-semibold relative" v-model="newTask.priority"
             as="div" v-auto-animate>
             <ListboxButton class="py-2 pl-3 pr-10 text-left bg-white rounded-md shadow-md">
@@ -56,15 +55,28 @@ function completeTask(task) {
                 leave-active-class="transition duration-75 ease-out" leave-from-class="transform scale-100 opacity-100"
                 leave-to-class="transform scale-95 opacity-0">
                 <ListboxOptions class="absolute z-10 mt-1 w-full bg-white rounded-md shadow-lg" v-auto-animate>
-                    <ListboxOption value="High" class="cursor-pointer select-none p-2 hover:bg-gray-100">High 🔥
-                    </ListboxOption>
-                    <ListboxOption value="Medium" class="cursor-pointer select-none p-2 hover:bg-gray-100">Medium ⚡
-                    </ListboxOption>
-                    <ListboxOption value="Low" class="cursor-pointer select-none p-2 hover:bg-gray-100">Low 🌳
+                    <ListboxOption v-for="option in todoStore.priOptions" :key="option.value" :value="option.value"
+                        class="cursor-pointer select-none p-2 hover:bg-gray-100">
+                        {{ option.label }}
                     </ListboxOption>
                 </ListboxOptions>
             </transition>
-
+        </Listbox>
+        <Listbox name=" category" id=" category" class="text-black font-semibold relative" v-model="newTask.category"
+            as="div" v-auto-animate>
+            <ListboxButton class="py-2 pl-3 pr-10 text-left bg-white rounded-md shadow-md">
+                {{ newTask.category || ' category' }}
+            </ListboxButton>
+            <transition enter-active-class="transition duration-100 ease-out"
+                enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
+                leave-active-class="transition duration-75 ease-out" leave-from-class="transform scale-100 opacity-100"
+                leave-to-class="transform scale-95 opacity-0">
+                <ListboxOptions class="absolute z-10 mt-1 w-full bg-white rounded-md shadow-lg" v-auto-animate>
+                    <ListboxOption v-for="option in todoStore.catOptions" :key="option.value" :value="option.value"
+                        class="cursor-pointer select-none p-2 hover:bg-gray-100"> {{ option.label }}
+                    </ListboxOption>
+                </ListboxOptions>
+            </transition>
         </Listbox>
         <button @click="addNewTask"
             class="p-2 rounded-md bg-violet-600 text-white fonts w-1/12 flex items-center justify-center"><svg
