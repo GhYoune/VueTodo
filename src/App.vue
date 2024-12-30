@@ -7,7 +7,7 @@ import TodoBody from '@/components/todoListComponents/TodoBody.vue'
 
 <template>
   <div class="w-full h-full">
-    <div class="h-1/6">
+    <div class="">
       <TodoBody />
     </div>
   </div>

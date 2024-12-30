@@ -21,6 +21,12 @@ const prioCheck = {
     "Medium": '⚡',
     "Low": '🌳',
 }
+const catCheck = {
+    "Health": '🍀',
+    "Work": '👨🏻‍💼',
+    "To Buy": '🏬',
+    "Familly": '🙋🏻‍♂️🙋🏻‍♀️',
+}
 const tasks = computed(() => todoStore.allTasks);
 onMounted(() => {
     todoStore.fetchTasks();
@@ -111,13 +117,14 @@ function completeTask(task) {
                             <span class="text-white font-semibold"
                                 :class="{ 'line-through opacity-35': task.completed }">{{
                                     task.title }} <span v-if="prioCheck[task.priority]">{{ prioCheck[task.priority]
+                                    }}</span> <span v-if="catCheck[task.category]">{{ catCheck[task.category]
                                     }}</span></span>
 
                         </div>
                     </div>
                     <div class=" flex items-center space-x-3">
-                        <span class=" rounded-xl p-1 font-semibold"
-                            :class="{ 'bg-red-500 text-white': task.priority === 'High', 'bg-green-500 text-white': task.priority === 'Low', 'bg-yellow-500 text-white': task.priority === 'Medium' }">{{
+                        <span class=" rounded-xl p-2 text-xs "
+                            :class="{ 'bg-red-500 text-white': task.priority === 'High', 'bg-green-500 text-white': task.priority === 'Low', 'bg-yellow-600 text-white': task.priority === 'Medium' }">{{
                                 task.priority }}</span>
                         <button @click="removeTask(task)"
                             class="p-2 rounded-full hover:bg-red-600 transition ease-in-out duration-300 ">
