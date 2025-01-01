@@ -1,7 +1,6 @@
 <script setup>
 import { useTaskStore } from "@/stores/taskStore.js";
 import { ref, computed } from 'vue';
-// import { Transition } from 'vue';
 import { onMounted } from 'vue';
 import { vAutoAnimate } from "@formkit/auto-animate";
 import {
@@ -11,10 +10,10 @@ import {
     ListboxOption,
 
 } from '@headlessui/vue'
-import { FormKit } from "@formkit/vue";
-
+import { useAlert } from '@/composables/useAlert.js';
 const todoStore = useTaskStore();
 const newTask = ref({ title: '', priority: '', category: '' });
+const { alert } = useAlert();
 
 const prioCheck = {
     "High": '🔥',
@@ -35,15 +34,29 @@ onMounted(() => {
 
 function addNewTask() {
     if (!newTask.value.title.trim() || !newTask.value.category.trim()) return;
-    todoStore.addTask(newTask.value)
-    newTask.value = { title: '', priority: '', category: '' };
+    try {
+        todoStore.addTask(newTask.value)
+        newTask.value = { title: '', priority: '', category: '' };
+        alert('Task added successfully')
+
+    }
+    catch {
+        alert('Somthing went wrong', 'error')
+
+
+    }
+
 }
 
 function removeTask(task) {
     todoStore.removeTask(task);
+    alert('Task Removed successfully')
+
 }
 function completeTask(task) {
     todoStore.taskCompleted(task);
+    alert('Task Completed successfully')
+
 }
 
 </script>
