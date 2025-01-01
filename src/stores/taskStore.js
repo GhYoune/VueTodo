@@ -41,13 +41,15 @@ export const useTaskStore = defineStore('task', {
     },
     async addTask(task) {
       if (!task.title.trim()) return
-
+      const date = new Date()
+      const formatter = new Intl.DateTimeFormat('en-CA')
+      const formattedDate = formatter.format(date)
       const newTask = {
         title: task.title,
         completed: false,
         priority: task.priority,
         category: task.category,
-        createdAt: new Date().toLocaleString(),
+        createdAt: formattedDate,
       }
 
       await addDoc(taskCollection, newTask)
@@ -101,6 +103,6 @@ export const useTaskStore = defineStore('task', {
   getters: {
     allTasks: (state) => state.tasks,
     tasksCount: (state) => state.tasks.length,
-    tasksByCatigories : (state)=>state
+    tasksByCatigories: (state) => state,
   },
 })

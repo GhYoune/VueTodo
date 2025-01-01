@@ -19,7 +19,8 @@
     "primeicons": "^7.0.0",
     "vue": "^3.5.13",
     "vue-cal": "^4.10.0",
-    "vue-router": "^4.4.5"
+    "vue-router": "^4.4.5",
+    "wave-ui": "^3.18.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",

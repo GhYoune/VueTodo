@@ -92,12 +92,28 @@ function completeTask(task) {
                 <circle cx="12" cy="12" r="10" />
                 <path d="M8 12h8" />
                 <path d="M12 8v8" />
-            </svg></button>
+            </svg>
+        </button>
 
 
     </div>
 
     <div class="p-3 bg-slate-800 w-full rounded-2xl shadow-lg my-4 ">
+        <div v-if="!tasks || tasks.length === 0" class="w-full">
+            <div class="flex justify-center items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-shield-question opacity-50">
+                    <path
+                        d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                    <path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3" />
+                    <path d="M12 17h.01" />
+                </svg>
+            </div>
+            <div class=" flex justify-center items-center p-2">
+                <span class="text-base font-semibold">Today seems empty</span>
+            </div>
+        </div>
         <ul class="max-h-[370px] overflow-y-auto custom-scrollbar" v-auto-animate>
             <li v-for="task in tasks"
                 class="text-sm font-semibold text-white bg-slate-700 px-3 py-3 rounded-md m-auto my-3 shadow-2xl hover:bg-slate-600 transition ease-in-out duration-300 cursor-pointer ">
