@@ -30,6 +30,7 @@ export const useTaskStore = defineStore('task', {
       ],
       selectedCategory: null,
       selectedPriority: null,
+      selectedDay: null,
     }),
   //FIRESTORE ACTIONS
   actions: {
@@ -79,6 +80,9 @@ export const useTaskStore = defineStore('task', {
       this.selectedCategory = null
       this.selectedPriority = null
     },
+    setSelectedDay(date) {
+      this.selectedDay = date
+    },
   },
 
   //LOCAL STORAGE ACTIONS
@@ -122,7 +126,8 @@ export const useTaskStore = defineStore('task', {
       return state.tasks.filter((task) => {
         const categoryMatch = !state.selectedCategory || task.category === state.selectedCategory
         const priorityMatch = !state.selectedPriority || task.priority === state.selectedPriority
-        return categoryMatch && priorityMatch
+        const dayMatch = !state.selectedDay || task.createdAt === state.selectedDay
+        return categoryMatch && priorityMatch && dayMatch
       })
     },
   },
