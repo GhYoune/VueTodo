@@ -66,7 +66,7 @@ function completeTask(task) {
             placeholder="New task ?" help="Your task headline" class="p-2 w-4/5 rounded-md text-black font-semibold" />
         <Listbox name="priority" id="priority" class="text-black font-semibold relative" v-model="newTask.priority"
             as="div" v-auto-animate>
-            <ListboxButton class="py-2 pl-3 pr-10 text-left bg-white rounded-md shadow-md">
+            <ListboxButton class="py-2 pl-3 pr-11 text-left bg-white rounded-md shadow-md">
                 {{ newTask.priority || 'Priority' }}
             </ListboxButton>
             <transition enter-active-class="transition duration-100 ease-out"
@@ -128,7 +128,7 @@ function completeTask(task) {
             </div>
         </div>
         <ul class="max-h-[370px] overflow-y-auto custom-scrollbar" v-auto-animate>
-            <li v-for="task in tasks"
+            <li v-for="task in todoStore.filtredTasks" :key="task.id"
                 class="text-sm font-semibold text-white bg-slate-700 px-3 py-3 rounded-md m-auto my-3 shadow-2xl hover:bg-slate-600 transition ease-in-out duration-300 cursor-pointer ">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center space-x-3 justify-center">

@@ -28,6 +28,8 @@ export const useTaskStore = defineStore('task', {
         { value: 'To Buy', label: 'To Buy 🏬' },
         { value: 'Familly', label: 'Familly and Friends 🙋🏻‍♂️🙋🏻‍♀️' },
       ],
+      selectedCategory: null,
+      selectedPriority: null,
     }),
   //FIRESTORE ACTIONS
   actions: {
@@ -63,6 +65,19 @@ export const useTaskStore = defineStore('task', {
     async taskCompleted(task) {
       const docRef = doc(db, 'tasks', task.id)
       await updateDoc(docRef, { completed: !task.completed })
+    },
+
+    //FILTERS
+    setCategory(category) {
+      this.selectedCategory = this.selectedCategory === category ? null : category
+      console.log(this.selectedCategory)
+    },
+    setPriority(priority) {
+      this.selectedPriority = this.selectedPriority === priority ? null : priority
+    },
+    clearFilters() {
+      this.selectedCategory = null
+      this.selectedPriority = null
     },
   },
 
@@ -103,6 +118,12 @@ export const useTaskStore = defineStore('task', {
   getters: {
     allTasks: (state) => state.tasks,
     tasksCount: (state) => state.tasks.length,
-    tasksByCatigories: (state) => state,
+    filtredTasks: (state) => {
+      return state.tasks.filter((task) => {
+        const categoryMatch = !state.selectedCategory || task.category === state.selectedCategory
+        const priorityMatch = !state.selectedPriority || task.priority === state.selectedPriority
+        return categoryMatch && priorityMatch
+      })
+    },
   },
 })

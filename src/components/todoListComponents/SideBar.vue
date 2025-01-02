@@ -4,11 +4,12 @@ import { computed } from 'vue';
 import { ref } from 'vue';
 import { vAutoAnimate } from "@formkit/auto-animate";
 const taskStore = useTaskStore();
-const isSidebarOpen = ref(false);
+const isSidebarOpen = ref(true);
 
 const toggleSidebar = () => {
     isSidebarOpen.value = !isSidebarOpen.value;
 };
+//COUNT TASKS BY CCATEGORY OR PRIORITY 
 const taskByCatigoriy = computed(() => {
     const counts = {};
     taskStore.catOptions.forEach(option => {
@@ -33,8 +34,12 @@ const taskByPriority = computed(() => {
     });
     return counts;
 })
+const clearFilters = () => {
+    taskStore.clearFilters()
+}
 </script>
 <template>
+
     <div class="relative w-full" v-auto-animate>
         <div :class="[
             'h-full bg-gray-800 fixed top-0 left-0 transform transition-transform duration-300 ease-in-out',
@@ -65,10 +70,25 @@ const taskByPriority = computed(() => {
                 </button>
             </div>
             <div class="h-full overflow-y-scroll custom-scrollbar">
-                <div class="p-4 font-bold text-lg underline ">Catigories :</div>
+                <div class="flex justify-between items-center">
+
+                    <span class="p-4 font-bold text-lg ">Catigories :</span>
+                    <button class="hover:bg-gray-600 transitions ease-in-out duration-200 rounded-sm "
+                        @click="clearFilters">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-list-restart">
+                            <path d="M21 6H3" />
+                            <path d="M7 12H3" />
+                            <path d="M7 18H3" />
+                            <path d="M12 18a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L11 14" />
+                            <path d="M11 10v4h4" />
+                        </svg>
+                    </button>
+                </div>
                 <div>
                     <ul class="p-2 space-y-4">
-                        <li v-for="option in taskStore.catOptions"
+                        <li v-for="option in taskStore.catOptions" @click="taskStore.selectedCategory = (option.value)"
                             class="text-sm font-semibold text-white bg-slate-700 px-3 py-3 rounded-md m-auto my-3 shadow-2xl hover:bg-slate-600 transition ease-in-out duration-300 cursor-pointer ">
                             <div class="flex justify-between"><span> {{ option.label }}</span> <span
                                     class="text-md ">({{
@@ -78,10 +98,10 @@ const taskByPriority = computed(() => {
                         </li>
                     </ul>
                 </div>
-                <div class="p-4 font-bold text-lg underline ">Priorities :</div>
+                <div class="p-4 font-bold text-lg">Priorities :</div>
                 <div>
                     <ul class="p-2 space-y-4">
-                        <li v-for="option in taskStore.priOptions"
+                        <li v-for="option in taskStore.priOptions" @click="taskStore.selectedPriority = (option.value)"
                             class="text-sm font-semibold text-white bg-slate-700 px-3 py-3 rounded-md m-auto my-3 shadow-2xl hover:bg-slate-600 transition ease-in-out duration-300 cursor-pointer ">
                             <div class="flex justify-between"><span> {{ option.label }}</span> <span
                                     class="text-md ">({{
